@@ -50,8 +50,8 @@ A browser-based, desktop-like Markdown reader that opens local files and folders
 
 ```bash
 # Clone the repository
-git clone <repo-url>
-cd <repo-directory>
+git clone https://github.com/Rakeshcool/richmarkdownviewer.git
+cd richmarkdownviewer
 
 # Install dependencies
 npm install
