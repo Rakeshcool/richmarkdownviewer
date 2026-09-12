@@ -6,6 +6,24 @@ function generateId(): string {
   return `file-${Date.now()}-${idCounter++}`;
 }
 
+/**
+ * Ask for read/write permission on a handle we already hold.
+ * Returns true if the handle is writable.
+ */
+export async function ensureWritePermission(handle: any): Promise<boolean> {
+  if (!handle) return false;
+  try {
+    if ((await handle.queryPermission({ mode: 'readwrite' })) === 'granted') {
+      return true;
+    }
+    return (
+      (await handle.requestPermission({ mode: 'readwrite' })) === 'granted'
+    );
+  } catch {
+    return false;
+  }
+}
+
 export function isFileSystemAccessSupported(): boolean {
   return 'showOpenFilePicker' in window || 'showDirectoryPicker' in window;
 }
@@ -24,6 +42,8 @@ export async function openFile(): Promise<FileSystemAccessResult> {
       ],
       multiple: false,
     });
+    // Request readwrite up front so saving later doesn't need another prompt
+    await ensureWritePermission(fileHandle);
 
     const file = await fileHandle.getFile();
     const content = await file.text();
@@ -57,7 +77,7 @@ export async function openFile(): Promise<FileSystemAccessResult> {
 export async function openFolder(): Promise<FileSystemAccessResult> {
   try {
     const dirHandle = await (window as any).showDirectoryPicker({
-      mode: 'read',
+      mode: 'readwrite',
     });
 
     const files = await scanDirectory(dirHandle, '');

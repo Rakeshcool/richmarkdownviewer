@@ -85,6 +85,7 @@ export function useSearch() {
         name: result.document.name,
         path: result.document.path,
         lastOpened: Date.now(),
+        content: result.document.content,
       });
       setShowSearch(false);
     },

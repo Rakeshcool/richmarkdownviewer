@@ -10,12 +10,14 @@ A browser-based, desktop-like Markdown reader that opens local files and folders
 - **Math support** — inline and block LaTeX via KaTeX
 - **Sidebar file tree** — collapsible, resizable, with search
 - **Tabs** — open multiple documents, switch between them, remember scroll position
+- **View history** — recently viewed files are listed in the top bar and remain viewable even after the workspace is closed
+- **Editing** — toggle any Markdown file into edit mode (pencil icon in the top bar), save with `Ctrl/Cmd+S`
 - **Search** — filename and content search across the workspace
 - **Themes** — light, dark, and system modes
-- **Keyboard shortcuts** — `Ctrl/Cmd+O` open file, `Ctrl/Cmd+Shift+O` open folder, `Ctrl/Cmd+P` quick search, `Ctrl/Cmd+B` toggle sidebar, `Ctrl/Cmd+F` in-document search
+- **Keyboard shortcuts** — `Ctrl/Cmd+O` open file, `Ctrl/Cmd+Shift+O` open folder, `Ctrl/Cmd+P` quick search, `Ctrl/Cmd+B` toggle sidebar, `Ctrl/Cmd+S` save
 - **Responsive** — works on desktop, tablet, and mobile
 - **Cross-platform desktop** — native `.exe` (Windows), `.dmg` (macOS), `.deb` / `.AppImage` (Linux) via Tauri
-- **Read-only** — v1 is a reader; editing may come later
+- **Read/edit modes** — read by default; one click switches to a distraction-free Markdown editor
 
 ## Tech Stack
 
@@ -26,6 +28,7 @@ A browser-based, desktop-like Markdown reader that opens local files and folders
 | Markdown | react-markdown, remark-gfm, remark-math, rehype-katex |
 | Syntax highlighting | Shiki |
 | State | Zustand |
+| Editing | Plain textarea with unsaved-changes tracking (dirty dot) and Ctrl+S save |
 | Styling | Plain CSS with CSS variables |
 | Desktop | Tauri 2 |
 | Testing | Vitest + Testing Library + jsdom |
@@ -123,6 +126,10 @@ Vite will print a local URL (default `http://localhost:5173`). Open it in Chrome
 The app targets **Chromium-based browsers** (Chrome, Edge, Arc, etc.) which support the File System Access API for native folder and file selection.
 
 On browsers without this API (Firefox, Safari), the app falls back to a standard `<input type="file">` picker. You'll see a message explaining the limitation.
+
+## Saving & Permissions
+
+When opening files/folders the app requests **read/write** permission up front, so saving with `Ctrl/Cmd+S` writes straight back to disk via the File System Access API. If a handle isn't available (e.g. fallback picker), saving offers the edited file as a download so no work is lost.
 
 ## Styling
 

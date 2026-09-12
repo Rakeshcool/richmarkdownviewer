@@ -30,6 +30,7 @@ export const FileItem = memo(function FileItem({ node, level }: FileItemProps) {
         name: node.name,
         path: node.path,
         lastOpened: Date.now(),
+        content: node.content,
       });
     }
   }, [node, openTab, addRecentFile]);

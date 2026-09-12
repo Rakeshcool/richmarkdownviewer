@@ -20,6 +20,10 @@ export interface Tab {
   id: string;
   document: MarkdownDocument;
   scrollPosition: number;
+  /** True when the document has unsaved changes */
+  dirty?: boolean;
+  /** The last saved content, used as the revert target */
+  savedContent?: string;
 }
 
 export interface SearchQuery {
@@ -44,6 +48,8 @@ export interface Theme {
 
 export type WorkspaceState = 'empty' | 'file' | 'folder';
 
+export type ViewMode = 'read' | 'edit';
+
 export interface AppState {
   workspace: WorkspaceState;
   fileTree: FileNode[];
@@ -58,12 +64,15 @@ export interface AppState {
   showSearch: boolean;
   showOutline: boolean;
   outlineVisible: boolean;
+  viewMode: ViewMode;
 }
 
 export interface RecentFile {
   name: string;
   path: string;
   lastOpened: number;
+  /** Snapshot of the content at last open, so history entries stay viewable without filesystem access */
+  content?: string;
 }
 
 export interface Heading {

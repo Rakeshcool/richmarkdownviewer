@@ -43,6 +43,7 @@ export function useWorkspace() {
         name: file.name,
         path: file.path,
         lastOpened: Date.now(),
+        content: file.content,
       });
     }
   }, [setWorkspace, setFileTree, setWorkspaceName, openTab, addRecentFile]);

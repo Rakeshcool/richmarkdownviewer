@@ -22,7 +22,7 @@ export const DocumentOutline = memo(function DocumentOutline() {
       const match = lines[i].match(/^(#{1,6})\s+(.*)/);
       if (match) {
         const level = match[1].length;
-        const text = match[2].replace(/[*_`~\[\]]/g, '').trim();
+        const text = match[2].replace(/[*_`~[]/g, '').trim();
         const id = text
           .toLowerCase()
           .replace(/[^a-z0-9]+/g, '-')

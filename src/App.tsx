@@ -8,6 +8,7 @@ import { StatusBar } from './components/StatusBar/StatusBar';
 import { Search } from './components/Search/Search';
 import { DocumentOutline } from './components/DocumentOutline/DocumentOutline';
 import { ChatRenderer } from './markdown/ChatRenderer';
+import { MarkdownEditor } from './components/MarkdownEditor/MarkdownEditor';
 import { useWorkspace } from './hooks/useWorkspace';
 import { useTheme } from './hooks/useTheme';
 import { useSearch } from './hooks/useSearch';
@@ -23,6 +24,8 @@ function App() {
     showMobileSidebar,
     setShowMobileSidebar,
     toggleSidebar,
+    viewMode,
+    saveActiveTab,
   } = useAppStore();
 
   const { handleOpenFile, handleOpenFolder } = useWorkspace();
@@ -49,12 +52,17 @@ function App() {
         e.preventDefault();
         toggleSidebar();
       }
+      // Ctrl/Cmd + S - Save current file
+      if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        e.preventDefault();
+        saveActiveTab();
+      }
       // Escape - Close dialogs
       if (e.key === 'Escape') {
         setShowMobileSidebar(false);
       }
     },
-    [handleOpenFile, handleOpenFolder, toggleSidebar, setShowMobileSidebar]
+    [handleOpenFile, handleOpenFolder, toggleSidebar, setShowMobileSidebar, saveActiveTab]
   );
 
   useEffect(() => {
@@ -85,9 +93,17 @@ function App() {
 
           <div className="markdown-content">
             {activeTab ? (
-              <div className="markdown-content-inner">
-                <ChatRenderer content={activeTab.document.content} />
-              </div>
+              viewMode === 'edit' ? (
+                <MarkdownEditor
+                  tabId={activeTab.id}
+                  content={activeTab.document.content}
+                  name={activeTab.document.name}
+                />
+              ) : (
+                <div className="markdown-content-inner">
+                  <ChatRenderer content={activeTab.document.content} />
+                </div>
+              )
             ) : (
               <div className="empty-state">
                 <div className="empty-state-icon">📄</div>

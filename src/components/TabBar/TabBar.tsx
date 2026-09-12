@@ -57,6 +57,13 @@ const TabItem = memo(function TabItem({ tab, isActive, onActivate, onClose }: Ta
         <polyline points="14 2 14 8 20 8" />
       </svg>
       <span className="tab-name">{tab.document.name}</span>
+      {tab.dirty && (
+        <span
+          className="tab-dirty-dot"
+          title="Unsaved changes"
+          aria-label="Unsaved changes"
+        />
+      )}
       <button
         className="tab-close"
         onClick={handleClose}
